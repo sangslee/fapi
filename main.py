@@ -27,6 +27,25 @@ async def redirector(url: str = "https://www.google.com"):
     return RedirectResponse(url)
 
 
+@app.get("/sleep")
+async def sleep(sec: int = 10):
+    if abs(sec) > 10:
+        sec = 10
+    body = '''
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+  <script>
+    console.log("before");
+    setTimeout(() => console.log("after"), {sec}000);
+  </script>
+</body>
+</html>
+    '''.format(sec=sec)
+    return HTMLResponse(content=body, status_code=200)
+
+
 @app.get("/document/write", response_class=HTMLResponse)
 async def document_write(url: str = "http://localhost"):
     body = '''
